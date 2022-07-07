@@ -1,11 +1,22 @@
+import { HomeComponent } from './home.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomePage } from './home.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomePage,
+    component: HomeComponent,
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'settings' },
+      {
+        path: 'settings',
+        loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
+      },
+      {
+        path: 'scanner',
+        loadChildren: () => import('./pages/scanner/scanner.module').then( m => m.ScannerPageModule)
+      }
+    ]
   }
 ];
 
@@ -13,4 +24,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class HomePageRoutingModule {}
+export class HomeRoutingModule {}
