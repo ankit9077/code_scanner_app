@@ -4,6 +4,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="isScanning" [style.--background]="'#00000000'">
+  <ion-button expand="full" (click)="stopScan()">Stop Scan</ion-button>
+</ion-content>
 
+
+<ion-content *ngIf="!isScanning">
+  <ion-button expand="full" (click)="startScanner()">
+    <ion-icon name="scan" slot="start"></ion-icon>Start Scan
+  </ion-button>
+  {{data}}
 </ion-content>

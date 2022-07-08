@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'settings' },
+      { path: '', pathMatch: 'full', redirectTo: 'scanner' },
       {
         path: 'settings',
         loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
