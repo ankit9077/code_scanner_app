@@ -45,12 +45,12 @@
 						></ion-input>
 						<br />
 						<ion-label position="stacked"
-							>Try: 'letme@in.com', 'password'</ion-label
+							>{{errorMessage}}</ion-label
 						>
 						<br />
 					</ion-item>
 
-					<ion-button expand="block">Login</ion-button>
+					<ion-button expand="block" (click)="login()">Login</ion-button>
 
 				</ion-card-content>
 			</ion-card>
