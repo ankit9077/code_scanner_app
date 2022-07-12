@@ -1,21 +1,27 @@
 
-  <ion-split-pane contentId="main-content">
+  <ion-split-pane *ngIf="!isloading" contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
-          <ion-list-header>Inbox</ion-list-header>
-          <ion-note>hi@ionicframework.com</ion-note>
+          <ion-list-header>Safe Runner</ion-list-header>
+          <ion-note>{{user.email}}</ion-note>
 
           <ion-menu-toggle auto-hide="false">
             <ion-item routerDirection="root" [routerLink]="['/home', 'scanner']" lines="none" detail="false" routerLinkActive="selected">
-              <ion-icon slot="start" [ios]="'mail-outline'" [md]="'mail-sharp'"></ion-icon>
+              <ion-icon slot="start" [ios]="'home-outline'" [md]="'home-sharp'"></ion-icon>
               <ion-label>Home</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item routerDirection="root" [routerLink]="['/home', 'settings']" lines="none" detail="false" routerLinkActive="selected">
-              <ion-icon slot="start" [ios]="'mail-outline'" [md]="'mail-sharp'"></ion-icon>
+              <ion-icon slot="start" [ios]="'settings-outline'" [md]="'settings-sharp'"></ion-icon>
               <ion-label>Settings</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item [routerLink]="['/', 'login']" (click)="logout()" lines="none" detail="false" routerLinkActive="selected">
+              <ion-icon slot="start" [ios]="'log-out-outline'" [md]="'log-out-sharp'"></ion-icon>
+              <ion-label>Logout</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
@@ -23,6 +29,3 @@
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
-
-
-<!-- <ion-router-outlet></ion-router-outlet> -->
