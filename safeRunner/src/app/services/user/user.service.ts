@@ -24,4 +24,15 @@ export class UserService {
       });
     });
   }
+
+  public setVehicleToUser(vehicleId: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.httpService.post(this.baseUrl+'/set-vehicle', {vehicleId}).subscribe((response: any) => {
+        this.user = response.result;
+        resolve(response.result);
+      }, (err) => {
+        reject(err.message);
+      });
+    });
+  }
 }

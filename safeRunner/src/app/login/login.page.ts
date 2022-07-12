@@ -1,9 +1,9 @@
+import { AlertService } from './../services/alert/alert.service';
 import { emailRegex } from './../../assets/constants';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './../services/authentication/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/assets/models';
-import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,7 @@ export class LoginPage implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-    private alertController: AlertController) {}
+    private alertService: AlertService) {}
 
   ngOnInit() {
   }
@@ -30,24 +30,27 @@ export class LoginPage implements OnInit {
       this.authService.authenticateUser(user).then((response) => {
         this.router.navigate(['home']);
       }, (err) => {
-        this.generateAlert(err.error.message);
+        this.alertService.generateAlert({
+          header: 'Error',
+          message: err.error.message,
+          buttons:[{text:'Ok', role: 'cancel'}]
+        });
       });
     }else{
       if(!user.email.match(emailRegex)){
-        this.generateAlert('Enter a valid Email');
+        this.alertService.generateAlert({
+            header: 'Error',
+            message: 'Enter a valid Email',
+            buttons:[{text:'Ok', role: 'cancel'}]
+          });
       }else{
-        this.generateAlert('values cannot be empty');
+        this.alertService.generateAlert({
+          header: 'Error',
+          message: 'values cannot be empty',
+          buttons:[{text:'Ok', role: 'cancel'}]
+        });
       }
     }
-  }
-
-  async generateAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: 'Error',
-      message,
-      buttons:[{text:'Ok', role: 'cancel'}]
-    });
-    await alert.present();
   }
 
 }

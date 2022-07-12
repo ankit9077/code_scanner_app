@@ -1,6 +1,8 @@
+import { AlertService } from './../../../services/alert/alert.service';
+import { UserService } from './../../../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
-import { AlertController } from '@ionic/angular';
+import { User } from 'src/assets/models';
 @Component({
   selector: 'app-scanner',
   templateUrl: './scanner.page.html',
@@ -9,14 +11,15 @@ import { AlertController } from '@ionic/angular';
 export class ScannerPage implements OnInit {
   isScanning = false;
   data ='';
-  constructor(private alertController: AlertController) { }
+  constructor(
+    private userService: UserService,
+    private alertService: AlertService) { }
+
+  get user(): User{
+    return this.userService.user;
+  }
 
   ngOnInit() {
-    this.alertController.create({
-      header: 'No permission',
-      message: 'Please allow camera access in your settings',
-      buttons:[{text:'Ok', role: 'cancel'}]
-    });
   }
 
   async startScanner(): Promise<void>{
@@ -43,12 +46,11 @@ export class ScannerPage implements OnInit {
       if(status.granted){
         resolve(true);
       }else if(status.denied){
-      const alert = await this.alertController.create({
-        header: 'No permission',
-        message: 'Please allow camera access in your settings',
-        buttons:[{text:'Ok', role: 'cancel'}]
-      });
-      await alert.present();
+        this.alertService.generateAlert({
+          header: 'No permission',
+          message: 'Please allow camera access in your settings',
+          buttons:[{text:'Ok', role: 'cancel'}]
+        });
       resolve(false);
       }else{
         resolve(false);
