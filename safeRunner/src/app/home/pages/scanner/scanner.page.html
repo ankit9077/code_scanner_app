@@ -8,13 +8,67 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="isScanning" [style.--background]="'#00000000'">
-  <ion-button expand="full" (click)="stopScan()">Stop Scan</ion-button>
+  <ion-button expand="full" (click)="stopScan()">Close</ion-button>
 </ion-content>
 
 
 <ion-content [fullscreen]="true" *ngIf="!isScanning">
   <ion-button expand="full" (click)="startScanner()">
-    <ion-icon name="scan" slot="start"></ion-icon>Start Scan
+    <ion-icon name="scan" slot="start"></ion-icon>Scan
   </ion-button>
-  {{data}}
+
+  <ion-accordion-group *ngIf="user.vehicle">
+    <ion-accordion value="first">
+      <ion-item slot="header" color="light">
+        <ion-label>Vehicle Info</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <b>Name:</b> {{user.vehicle.name}}
+        <br>
+        <b>Plate Number:</b> {{user.vehicle.plateNumber}}
+        <br>
+        <b>Total Codes:</b> {{user.scannedCodes.length}}
+        <br>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+
+  <ng-container *ngFor="let item of user.scannedCodes">
+    <ion-card [class.success]="item.checked && !item.hasIssue" [class.fail]="item.checked && item.hasIssue">
+      <ion-card-header>
+        <ion-grid>
+          <ion-row>
+            <ion-col class="ion-text-start">
+              <ion-card-subtitle>Task Name</ion-card-subtitle>
+              <ion-card-title>{{item.title}}</ion-card-title>
+            </ion-col>
+            <ion-col class="ion-text-end">
+              <ion-card-subtitle>Status</ion-card-subtitle>
+              <ion-card-title style="color:#229954;" *ngIf="item.checked && !item.hasIssue">Approved</ion-card-title>
+              <ion-card-title style="color:#B03A2E;" *ngIf="item.checked && item.hasIssue">Rejected</ion-card-title>
+              <ion-card-title *ngIf="!item.checked">To be checked</ion-card-title>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-header>
+
+      <ion-card-content>
+        <span *ngIf="item.hasIssue"><b>Issue Desc:</b> {{item.issueDesc}}</span>
+        <br>
+        <b>Checked Time:</b> {{getDate(item.dateTime)}}
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ion-grid *ngIf="user.vehicleGuid.length">
+    <ion-row>
+      <ion-col>
+        <ion-button [disabled]="!checkIfSubmitAllowed()" expand="full" (click)="submitReport()">Submit</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="full">Cancel</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>

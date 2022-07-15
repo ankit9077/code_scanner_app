@@ -1,3 +1,4 @@
+import { ScannedCode } from './../../../assets/models';
 import { Router } from '@angular/router';
 import { HttpService } from './../http/http.service';
 import { Injectable } from '@angular/core';
@@ -29,6 +30,17 @@ export class UserService {
     return new Promise((resolve, reject) => {
       this.httpService.post(this.baseUrl+'/set-vehicle', {vehicleId}).subscribe((response: any) => {
         this.user = response.result;
+        resolve(response.result);
+      }, (err) => {
+        reject(err.message);
+      });
+    });
+  }
+
+  public saveScannedCodeToUser(code: ScannedCode): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.httpService.post(this.baseUrl+'/save-codes', code).subscribe((response: any) => {
+        this.user.scannedCodes = response.result;
         resolve(response.result);
       }, (err) => {
         reject(err.message);
