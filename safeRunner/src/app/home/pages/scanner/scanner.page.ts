@@ -35,13 +35,19 @@ export class ScannerPage implements OnInit {
         if(data.p && data.v) {
           if(!this.user.vehicleGuid.length) {
             this.userService.setVehicleToUser(data.v).then((response)=>{
-
+              this.setScannedPartStatus(data.p);
             },(err)=>{
               this.alertService.generateAlert({
                 header: 'Something went wrong!',
                 message: err,
                 buttons:[{text:'Ok', role: 'cancel'}]
               });
+            });
+          }else if(this.user.vehicleGuid!==data.v){
+            this.alertService.generateAlert({
+              header: '',
+              message: 'Cancel previous progress before changing Vehicle',
+              buttons:[{text:'Ok', role: 'cancel'}]
             });
           }else{
             this.setScannedPartStatus(data.p);
@@ -183,7 +189,44 @@ export class ScannerPage implements OnInit {
 
 
   submitReport(){
+    if(this.checkIfSubmitAllowed()){
+      this.userService.submitReport().then((response)=>{
+        this.alertService.generateAlert({
+          header: 'Successfully Submitted report',
+          message: '',
+          buttons:[{text:'Ok', role: 'cancel'}]
+        });
+      },err=>{
+        this.alertService.generateAlert({
+          header: 'Something went wrong!',
+          message: err,
+          buttons:[{text:'Ok', role: 'cancel'}]
+        });
+      });
+    }
+  }
 
+  async cancelScanner(){
+
+    const alert = await this.alertController.create({
+      header: '',
+      message: `Are you sure you want to cancel your progress`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Confirm',
+          handler: () => {
+            this.userService.cancelScanner().then((response)=>{
+            },(err)=>{
+            });
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
 }

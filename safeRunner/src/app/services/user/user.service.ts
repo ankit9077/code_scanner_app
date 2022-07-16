@@ -47,4 +47,26 @@ export class UserService {
       });
     });
   }
+
+  public submitReport(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.httpService.post(this.baseUrl+'/submit-report',{}).subscribe((response: any) => {
+        this.user = response.result;
+        resolve(response.result);
+      }, (err) => {
+        reject(err.message);
+      });
+    });
+  }
+
+  public cancelScanner(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.httpService.get(this.baseUrl+'/cancel-scan').subscribe((response: any) => {
+        this.user = response.result;
+        resolve(response.result);
+      }, (err) => {
+        reject(err.message);
+      });
+    });
+  }
 }
