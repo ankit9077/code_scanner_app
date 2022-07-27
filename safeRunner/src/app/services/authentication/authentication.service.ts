@@ -40,6 +40,27 @@ export class AuthenticationService {
     });
   }
 
+  public forgotPassword(email: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.httpService.post(this.baseUrl + '/forgot-password', { email }).subscribe((response) => {
+        resolve(response);
+      }, (err: any) => {
+        reject(err.error);
+      });
+    });
+  }
+
+  public resetPassword(token: string, password: string): Promise<any> {
+    password = window.btoa(password);
+    return new Promise((resolve, reject) => {
+      this.httpService.post(this.baseUrl + '/reset-password', { token, password }).subscribe((response) => {
+        resolve(response);
+      }, (err: any) => {
+        reject(err.error);
+      });
+    });
+  }
+
   public logout(): void {
     localStorage.clear();
     this.router.navigate(['login']);
