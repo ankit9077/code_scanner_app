@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   // api: 'https://safe-runner.herokuapp.com/api/emp'
   api: 'http://10.0.2.2:3000/api/emp'
+  // api: 'http://localhost:3000/api/emp'
 };
 
 /*

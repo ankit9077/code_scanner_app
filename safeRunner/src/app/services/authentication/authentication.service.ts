@@ -25,6 +25,21 @@ export class AuthenticationService {
     });
   }
 
+  public changePassword(passwords: any): Promise<any> {
+    const tempPasswords = {
+      oldPassword:btoa(passwords.oldPassword.value.trim()),
+      newPassword:btoa(passwords.newPassword.value.trim()),
+      confirmPassword:btoa(passwords.confirmPassword.value.trim())
+    };
+    return new Promise((resolve, reject) => {
+      this.httpService.post(this.baseUrl + '/change-password', tempPasswords).subscribe((response: any) => {
+        resolve(response);
+      }, (err: any) => {
+        reject(err.error);
+      });
+    });
+  }
+
   public logout(): void {
     localStorage.clear();
     this.router.navigate(['login']);

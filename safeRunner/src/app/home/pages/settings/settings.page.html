@@ -8,5 +8,59 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+    <ion-list>
+      <ion-item>
+        <ion-label><b>Name:</b> {{user.name}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label><b>Email:</b> {{user.email}}</ion-label>
+      </ion-item>
+    </ion-list>
+    <br>
+  <ion-button *ngIf="!showPasswordChange" (click)="openChangePasswordSettings()">Change Account Password</ion-button>
+
+  <ion-list *ngIf="showPasswordChange">
+    <ion-item>
+      <ion-label><b>Old Password:</b></ion-label>
+      <ion-input
+        [type]="passwords.oldPassword.show ? 'text': 'password'"
+        placeholder="Enter Old Password"
+        name="oldPassword"
+        [(ngModel)]="passwords.oldPassword.value"
+      ></ion-input>
+      <a class="type-toggle">
+        <ion-icon class="show-option" (click)="passwords.oldPassword.show=true" [hidden]="passwords.oldPassword.show" name="eye-off-outline"></ion-icon>
+        <ion-icon class="hide-option" (click)="passwords.oldPassword.show=false" [hidden]="!passwords.oldPassword.show" name="eye-outline"></ion-icon>
+     </a>
+    </ion-item>
+    <ion-item>
+      <ion-label><b>New Password:</b></ion-label>
+      <ion-input
+        [type]="passwords.newPassword.show ? 'text': 'password'"
+        placeholder="Enter New Password"
+        name="newPassword"
+        [(ngModel)]="passwords.newPassword.value"
+      ></ion-input>
+      <a class="type-toggle">
+        <ion-icon class="show-option" (click)="passwords.newPassword.show=true" [hidden]="passwords.newPassword.show" name="eye-off-outline"></ion-icon>
+        <ion-icon class="hide-option" (click)="passwords.newPassword.show=false" [hidden]="!passwords.newPassword.show" name="eye-outline"></ion-icon>
+     </a>
+    </ion-item>
+    <ion-item>
+      <ion-label><b>Confirm Password:</b></ion-label>
+      <ion-input
+      [type]="passwords.confirmPassword.show ? 'text': 'password'"
+        placeholder="Confirm New Password"
+        name="confirmPassword"
+        [(ngModel)]="passwords.confirmPassword.value"
+      ></ion-input>
+      <a class="type-toggle">
+        <ion-icon class="show-option" (click)="passwords.confirmPassword.show=true" [hidden]="passwords.confirmPassword.show" name="eye-off-outline"></ion-icon>
+        <ion-icon class="hide-option" (click)="passwords.confirmPassword.show=false" [hidden]="!passwords.confirmPassword.show" name="eye-outline"></ion-icon>
+     </a>
+    </ion-item>
+  </ion-list>
+  <ion-button [disabled]="checkIfPasswordsValid()" *ngIf="showPasswordChange" (click)="changePassword()">Save</ion-button>
+  <ion-button *ngIf="showPasswordChange" (click)="showPasswordChange=false">Cancel</ion-button>
 
 </ion-content>
