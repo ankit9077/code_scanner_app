@@ -2,5 +2,6 @@
 	"appId": "io.ionic.starter",
 	"appName": "safeRunner",
 	"webDir": "www",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"allowMixedContent": true
 }

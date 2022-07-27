@@ -7,15 +7,18 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-header *ngIf="!isScanning">
+  <ion-button expand="full" (click)="startScanner()">
+    <ion-icon name="scan" slot="start"></ion-icon>Scan
+  </ion-button>
+</ion-header>
+
 <ion-content [fullscreen]="true" *ngIf="isScanning" [style.--background]="'#00000000'">
   <ion-button expand="full" (click)="stopScan()">Close</ion-button>
 </ion-content>
 
 
-<ion-content [fullscreen]="true" *ngIf="!isScanning">
-  <ion-button expand="full" (click)="startScanner()">
-    <ion-icon name="scan" slot="start"></ion-icon>Scan
-  </ion-button>
+<ion-content *ngIf="!isScanning">
 
   <ion-accordion-group *ngIf="user.vehicleGuid.length && user.vehicle">
     <ion-accordion value="first">
@@ -60,7 +63,10 @@
     </ion-card>
   </ng-container>
 
-  <ion-grid *ngIf="user.vehicleGuid.length">
+</ion-content>
+
+<ion-footer *ngIf="!isScanning && user.vehicleGuid.length">
+  <ion-grid>
     <ion-row>
       <ion-col>
         <ion-button [disabled]="!checkIfSubmitAllowed()" expand="full" (click)="submitReport()">Submit</ion-button>
@@ -70,5 +76,4 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-
-</ion-content>
+</ion-footer>

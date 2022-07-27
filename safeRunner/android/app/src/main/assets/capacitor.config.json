@@ -2,5 +2,9 @@
 	"appId": "io.ionic.starter",
 	"appName": "safeRunner",
 	"webDir": "www",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"allowMixedContent": true,
+	"server": {
+		"url": "http://192.168.56.1:8100"
+	}
 }
