@@ -8,6 +8,7 @@ export class User {
   vehicleGuid!: string;
   scannedCodes!: Array<ScannedCode>;
   vehicle!: Vehicle;
+  isMultiUserVehicle!: boolean;
   constructor() {
     this.scannedCodes = [];
     this.vehicleGuid = '';

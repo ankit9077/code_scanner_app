@@ -48,9 +48,9 @@ export class UserService {
     });
   }
 
-  public submitReport(): Promise<any> {
+  public submitReport(plateNumber: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.httpService.post(this.baseUrl+'/submit-report',{}).subscribe((response: any) => {
+      this.httpService.post(this.baseUrl+'/submit-report',{plateNumber}).subscribe((response: any) => {
         this.user = response.result;
         resolve(response.result);
       }, (err) => {

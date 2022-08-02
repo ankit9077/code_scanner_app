@@ -2,7 +2,7 @@ import { ScannedCode } from './../../../../assets/models';
 import { AlertController } from '@ionic/angular';
 import { AlertService } from './../../../services/alert/alert.service';
 import { UserService } from './../../../services/user/user.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import { User } from 'src/assets/models';
 import * as moment from 'moment';
@@ -11,7 +11,7 @@ import * as moment from 'moment';
   templateUrl: './scanner.page.html',
   styleUrls: ['./scanner.page.scss'],
 })
-export class ScannerPage implements OnInit {
+export class ScannerPage implements OnInit, OnDestroy {
   isScanning = false;
   constructor(
     private alertController: AlertController,
@@ -23,6 +23,12 @@ export class ScannerPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(): void {
+    if(this.isScanning){
+      this.stopScan();
+    }
   }
 
   async startScanner(): Promise<void>{
@@ -188,22 +194,63 @@ export class ScannerPage implements OnInit {
   }
 
 
-  submitReport(){
+  initiateSubmitReport(){
     if(this.checkIfSubmitAllowed()){
-      this.userService.submitReport().then((response)=>{
-        this.alertService.generateAlert({
-          header: 'Successfully Submitted report',
-          message: '',
-          buttons:[{text:'Ok', role: 'cancel'}]
-        });
-      },err=>{
-        this.alertService.generateAlert({
-          header: 'Something went wrong!',
-          message: err,
-          buttons:[{text:'Ok', role: 'cancel'}]
-        });
-      });
+      if(this.user.isMultiUserVehicle){
+        this.getVehiclePlateNumberAndSubmit();
+      }else{
+        this.submitReport();
+      }
     }
+  }
+
+  submitReport(vehiclePlateNumber = ''){
+    this.userService.submitReport(vehiclePlateNumber).then((response)=>{
+      this.alertService.generateAlert({
+        header: 'Successfully Submitted report',
+        message: '',
+        buttons:[{text:'Ok', role: 'cancel'}]
+      });
+    },err=>{
+      this.alertService.generateAlert({
+        header: 'Something went wrong!',
+        message: err,
+        buttons:[{text:'Ok', role: 'cancel'}]
+      });
+    });
+  }
+
+  async getVehiclePlateNumberAndSubmit(){
+    const alert = await this.alertController.create({
+      header: 'Truck Plate Number',
+      inputs: [
+        {
+          name: 'plateNumber',
+          placeholder: 'Enter Plate Number'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Submit',
+          handler: data => {
+            if(data.plateNumber && data.plateNumber.trim().length >= 5){
+              this.submitReport(data.plateNumber.trim());
+            }else{
+              this.alertService.generateAlert({
+                header: 'Incorrect plate Number',
+                message: 'Enter correct plate number',
+                buttons:[{text:'Ok', role: 'cancel'}]
+              });
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async cancelScanner(){

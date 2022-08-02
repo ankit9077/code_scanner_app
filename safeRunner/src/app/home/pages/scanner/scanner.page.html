@@ -28,8 +28,8 @@
       <div class="ion-padding" slot="content">
         <b>Name:</b> {{user.vehicle.name}}
         <br>
-        <b>Plate Number:</b> {{user.vehicle.plateNumber}}
-        <br>
+        <b *ngIf="!user.isMultiUserVehicle">Plate Number:</b> {{user.vehicle.plateNumber}}
+        <br *ngIf="!user.isMultiUserVehicle">
         <b>Total Codes:</b> {{user.scannedCodes.length}}
         <br>
       </div>
@@ -69,7 +69,7 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-button [disabled]="!checkIfSubmitAllowed()" expand="full" (click)="submitReport()">Submit</ion-button>
+        <ion-button [disabled]="!checkIfSubmitAllowed()" expand="full" (click)="initiateSubmitReport()">Submit</ion-button>
       </ion-col>
       <ion-col>
         <ion-button expand="full" (click)="cancelScanner()">Cancel</ion-button>
