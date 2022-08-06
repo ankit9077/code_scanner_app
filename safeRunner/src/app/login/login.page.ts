@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
       }, (err) => {
         this.alertService.generateAlert({
           header: 'Error',
-          message: err.error.message,
+          message: err.message,
           buttons:[{text:'Ok', role: 'cancel'}]
         });
       });

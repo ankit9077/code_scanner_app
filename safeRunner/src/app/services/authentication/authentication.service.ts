@@ -20,7 +20,7 @@ export class AuthenticationService {
         localStorage.setItem(this.httpService.AUTHORIZATION_KEY, response.authToken);
         resolve(response);
       }, (err: any) => {
-        reject(err);
+        reject(err.error);
       });
     });
   }
