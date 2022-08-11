@@ -20,6 +20,16 @@
 
 <ion-content *ngIf="!isScanning">
 
+  <div class="empty-state" *ngIf="!(user.vehicleGuid.length && user.vehicle)">
+      <ion-card-header>
+        <ion-label>
+          <ion-icon name="qr-code-outline"></ion-icon>
+        </ion-label>
+        <ion-label class="header-text"><b>No QR codes found!</b></ion-label>
+        <ion-label>Click on the scan button to start scanning</ion-label>
+      </ion-card-header>
+  </div>
+
   <ion-accordion-group *ngIf="user.vehicleGuid.length && user.vehicle">
     <ion-accordion value="first">
       <ion-item slot="header" color="light">
