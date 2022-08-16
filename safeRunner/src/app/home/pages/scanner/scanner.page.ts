@@ -36,7 +36,7 @@ export class ScannerPage implements OnInit, OnDestroy {
     if(hasPermission){
       this.isScanning = true;
       const results = await BarcodeScanner.startScan();
-      if(results.hasContent) {
+      if(results.hasContent && this.isJsonParsable(results.content)) {
         const data = JSON.parse(results.content);
         if(data.p && data.v) {
           if(!this.user.vehicleGuid.length) {
@@ -65,6 +65,12 @@ export class ScannerPage implements OnInit, OnDestroy {
             buttons:[{text:'Ok', role: 'cancel'}]
           });
         }
+      }else{
+        this.alertService.generateAlert({
+          header: '',
+          message: 'Scan a valid QR Code!',
+          buttons:[{text:'Ok', role: 'cancel'}]
+        });
       }
       this.stopScan();
     }
@@ -74,6 +80,15 @@ export class ScannerPage implements OnInit, OnDestroy {
     this.isScanning = false;
     BarcodeScanner.showBackground();
     BarcodeScanner.stopScan();
+  }
+
+  isJsonParsable(str: string) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
   }
 
   async checkPermissions() {
